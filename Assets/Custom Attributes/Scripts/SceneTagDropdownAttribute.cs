@@ -1,3 +1,15 @@
+/*
+ * ---------------------------------------------------------------------------
+ * Description: This script defines a custom attribute and property drawer for 
+ *              Unity. It allows string fields in the Inspector to display a 
+ *              dropdown menu containing the names of scenes from the 
+ *              Editor Build Settings. It supports warnings for missing or 
+ *              disabled scenes and dynamically adjusts UI height.
+ * Author: Lucas Gomes Cecchini
+ * Pseudonym: AGAMENOM
+ * ---------------------------------------------------------------------------
+*/
+
 using UnityEngine;
 
 #if UNITY_EDITOR
@@ -30,9 +42,9 @@ public class SceneTagDropdownDrawer : PropertyDrawer
         var allScenes = EditorBuildSettings.scenes.Select(scene => Path.GetFileNameWithoutExtension(scene.path)).ToArray();
         var enabledScenes = allScenes.Where(scene => EditorBuildSettings.scenes.First(s => Path.GetFileNameWithoutExtension(s.path) == scene).enabled).ToArray();
 
-        // Add a "Missing Scenario" option to the dropdown if needed.
+        // Add a "Missing Scene" option to the dropdown if needed.
         string currentString = property.stringValue;
-        string currentText = string.IsNullOrEmpty(currentString) ? "Missing Scenario" : $"Missing Scenario ({currentString})";
+        string currentText = string.IsNullOrEmpty(currentString) ? "Missing Scene" : $"Missing Scene ({currentString})";
         string missingScene = Array.Exists(allScenes, scene => scene == currentString) ? $"{currentString} [Disabled]" : currentText;
         string missingText = Array.Exists(enabledScenes, scene => scene == currentString) ? "" : missingScene;
         List<string> sceneList = new() { missingText };
@@ -40,12 +52,12 @@ public class SceneTagDropdownDrawer : PropertyDrawer
 
         // Find the index of the current property value in the scene list.
         int currentIndex = sceneList.IndexOf(currentString);
-        if (currentIndex == -1) currentIndex = 0; // If the current value is not in the list, select "Missing Scenario".
+        if (currentIndex == -1) currentIndex = 0; // If the current value is not in the list, select "Missing Scene".
 
         // Display the dropdown in the Inspector.
         int newIndex = EditorGUI.Popup(position, label.text, currentIndex, sceneList.ToArray());
 
-        // If the selected option is not "Missing Scenario", update the string with the new selection.
+        // If the selected option is not "Missing Scene", update the string with the new selection.
         if (newIndex != 0) property.stringValue = sceneList[newIndex];
 
         // Checks if the scene is in EditorBuildSettings but disabled.
@@ -68,19 +80,16 @@ public class SceneTagDropdownDrawer : PropertyDrawer
         // Get all the scenes again.
         var allScenes = EditorBuildSettings.scenes.Select(scene => Path.GetFileNameWithoutExtension(scene.path)).ToArray();
 
-        if (!string.IsNullOrEmpty(property.stringValue))
+        // Checks if property value is empty or does not match any scene.
+        if (string.IsNullOrEmpty(property.stringValue) || !Array.Exists(allScenes, scene => scene == property.stringValue))
         {
-            // Checks if the scene is missing.
-            if (!Array.Exists(allScenes, scene => scene == property.stringValue))
-            {
-                return EditorGUIUtility.singleLineHeight * 3; // Adds extra height to missing scenery.
-            }
+            return EditorGUIUtility.singleLineHeight * 3; // Adds extra height to the warning.
+        }
 
-            // Checks if the scene is disabled.
-            if (allScenes.Contains(property.stringValue) && !EditorBuildSettings.scenes.First(s => Path.GetFileNameWithoutExtension(s.path) == property.stringValue).enabled)
-            {
-                return EditorGUIUtility.singleLineHeight * 3; // Adds extra height if scene is disabled.
-            }
+        // Checks if the scene is disabled.
+        if (allScenes.Contains(property.stringValue) && !EditorBuildSettings.scenes.First(s => Path.GetFileNameWithoutExtension(s.path) == property.stringValue).enabled)
+        {
+            return EditorGUIUtility.singleLineHeight * 3; // Adds extra height if the scene is disabled.
         }
 
         return EditorGUIUtility.singleLineHeight; // Default height if no warnings.

@@ -1,3 +1,15 @@
+/*
+ * ---------------------------------------------------------------------------
+ * Description: This script defines a custom attribute, ReadOnlyAttribute, 
+ *              and a corresponding PropertyDrawer. When applied to a field, 
+ *              the attribute makes it read-only in the Unity Inspector. This 
+ *              is useful for displaying information without allowing edits, 
+ *              ensuring data integrity.
+ * Author: Lucas Gomes Cecchini
+ * Pseudonym: AGAMENOM
+ * ---------------------------------------------------------------------------
+*/
+
 using UnityEngine;
 
 #if UNITY_EDITOR

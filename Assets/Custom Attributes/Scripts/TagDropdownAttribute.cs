@@ -1,3 +1,12 @@
+/*
+ * ---------------------------------------------------------------------------
+ * Description: Defines a custom attribute and property drawer to display a 
+ *              dropdown menu for Unity tags in the Inspector.
+ * Author: Lucas Gomes Cecchini
+ * Pseudonym: AGAMENOM
+ * ---------------------------------------------------------------------------
+*/
+
 using UnityEngine;
 
 #if UNITY_EDITOR

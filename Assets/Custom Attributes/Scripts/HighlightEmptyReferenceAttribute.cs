@@ -1,3 +1,15 @@
+/*
+ * ---------------------------------------------------------------------------
+ * Description: This script defines a custom attribute, HighlightEmptyReferenceAttribute, 
+ *              and its corresponding PropertyDrawer. It is used to highlight fields 
+ *              with null references in the Unity Inspector. The script visually marks 
+ *              such fields with a red background and provides a warning message, 
+ *              improving error detection and debugging.
+ * Author: Lucas Gomes Cecchini
+ * Pseudonym: AGAMENOM
+ * ---------------------------------------------------------------------------
+*/
+
 using UnityEngine;
 
 #if UNITY_EDITOR

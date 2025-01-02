@@ -1,3 +1,14 @@
+/*
+ * ---------------------------------------------------------------------------
+ * Description: This script defines a custom attribute, ConditionalHideAttribute, 
+ *              which allows properties in the Unity Inspector to be conditionally 
+ *              hidden based on the values of other properties. It also includes a 
+ *              custom PropertyDrawer to handle the attribute's logic and rendering.
+ * Author: Lucas Gomes Cecchini
+ * Pseudonym: AGAMENOM
+ * ---------------------------------------------------------------------------
+*/
+
 using UnityEngine;
 
 #if UNITY_EDITOR
