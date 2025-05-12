@@ -29,11 +29,14 @@ public class TestAttributes : MonoBehaviour
     [SerializeField][ConditionalHide(false, "hide3", "hide4")] private string conditionalHide4 = "Test Attributes";
     public bool hide3 = false;
     public bool hide4 = true;
-#pragma warning restore CS0414
+
+    [Button(nameof(TestAttribute))]
+    private void TestAttribute() => Debug.Log("Test Attribute");
 
     [System.Serializable]
     public class TestCustomAttributes
     {
         public bool hide;
     }
+#pragma warning restore CS0414
 }

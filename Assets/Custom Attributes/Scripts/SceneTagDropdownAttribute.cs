@@ -5,6 +5,9 @@
  *              dropdown menu containing the names of scenes from the 
  *              Editor Build Settings. It supports warnings for missing or 
  *              disabled scenes and dynamically adjusts UI height.
+ * 
+ * Using:       [SceneTagDropdown]
+ * 
  * Author: Lucas Gomes Cecchini
  * Pseudonym: AGAMENOM
  * ---------------------------------------------------------------------------

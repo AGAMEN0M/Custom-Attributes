@@ -5,6 +5,9 @@
  *              the attribute makes it read-only in the Unity Inspector. This 
  *              is useful for displaying information without allowing edits, 
  *              ensuring data integrity.
+ * 
+ * Using:       [ReadOnly]
+ * 
  * Author: Lucas Gomes Cecchini
  * Pseudonym: AGAMENOM
  * ---------------------------------------------------------------------------

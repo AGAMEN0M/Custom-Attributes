@@ -4,6 +4,12 @@
  *              which allows properties in the Unity Inspector to be conditionally 
  *              hidden based on the values of other properties. It also includes a 
  *              custom PropertyDrawer to handle the attribute's logic and rendering.
+ * 
+ * Using:       [ConditionalHide("myReference")]
+ *              [ConditionalHide("myClass.myReference")]
+ *              [ConditionalHide("myReference1", "myReference2")]
+ *              [ConditionalHide(false, "myReference1", "myReference2")]
+ * 
  * Author: Lucas Gomes Cecchini
  * Pseudonym: AGAMENOM
  * ---------------------------------------------------------------------------

@@ -2,6 +2,9 @@
  * ---------------------------------------------------------------------------
  * Description: Defines a custom attribute and property drawer to display a 
  *              dropdown menu for Unity tags in the Inspector.
+ * 
+ * Using:       [TagDropdown]
+ * 
  * Author: Lucas Gomes Cecchini
  * Pseudonym: AGAMENOM
  * ---------------------------------------------------------------------------
@@ -28,7 +31,7 @@ public class TagDropdownDrawer : PropertyDrawer
         // Make sure the property is of type string.
         if (property.propertyType != SerializedPropertyType.String)
         {
-            EditorGUI.LabelField(position, label.text, "Use [TagDropdown] com strings.");
+            EditorGUI.LabelField(position, label.text, "Use [TagDropdown] with strings.");
             return;
         }
 
