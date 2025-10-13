@@ -23,15 +23,40 @@ using System.IO;
 using System;
 #endif
 
+#region === Attribute Definition ===
+
+/// <summary>
+/// Attribute used to display a dropdown menu of scenes from the Editor Build Settings
+/// for string fields in the Unity Inspector.
+/// </summary>
 public class SceneTagDropdownAttribute : PropertyAttribute
 {
     // This attribute is just a marker, it does not need additional implementation.
 }
 
+#endregion
+
 #if UNITY_EDITOR
+
+#region === SceneTagDropdownDrawer ===
+
+/// <summary>
+/// Custom PropertyDrawer that displays a dropdown for string fields marked with
+/// <see cref="SceneTagDropdownAttribute"/>. It handles missing scenes, disabled
+/// scenes, and dynamically adjusts the field height in the Inspector.
+/// </summary>
 [CustomPropertyDrawer(typeof(SceneTagDropdownAttribute))]
 public class SceneTagDropdownDrawer : PropertyDrawer
 {
+    #region === OnGUI ===
+
+    /// <summary>
+    /// Draws the property field as a dropdown menu of scenes.
+    /// Displays warnings or errors if the scene is missing or disabled.
+    /// </summary>
+    /// <param name="position">The rect for the property field.</param>
+    /// <param name="property">The serialized property being drawn.</param>
+    /// <param name="label">The GUI label of the property.</param>
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
         // Make sure the property is of type string.
@@ -57,6 +82,9 @@ public class SceneTagDropdownDrawer : PropertyDrawer
         int currentIndex = sceneList.IndexOf(currentString);
         if (currentIndex == -1) currentIndex = 0; // If the current value is not in the list, select "Missing Scene".
 
+        // Label with tooltip above the popup.
+        EditorGUI.LabelField(position, new GUIContent("", label.tooltip));
+
         // Display the dropdown in the Inspector.
         int newIndex = EditorGUI.Popup(position, label.text, currentIndex, sceneList.ToArray());
 
@@ -77,7 +105,17 @@ public class SceneTagDropdownDrawer : PropertyDrawer
         }
     }
 
-    // Specifies the additional height required to display the warning.
+    #endregion
+
+    #region === GetPropertyHeight ===
+
+    /// <summary>
+    /// Returns the height of the property field in the Inspector.
+    /// Adds extra height for warnings or errors.
+    /// </summary>
+    /// <param name="property">The property being drawn.</param>
+    /// <param name="label">The GUI label of the property.</param>
+    /// <returns>Height of the property field.</returns>
     public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
     {
         // Get all the scenes again.
@@ -97,5 +135,10 @@ public class SceneTagDropdownDrawer : PropertyDrawer
 
         return EditorGUIUtility.singleLineHeight; // Default height if no warnings.
     }
+
+    #endregion
 }
+
+#endregion
+
 #endif

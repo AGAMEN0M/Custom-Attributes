@@ -19,18 +19,35 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-// Defines a custom attribute called ReadOnlyAttribute, which will be used to make fields read-only in the Inspector.
+#region === Attribute Definition ===
+
+/// <summary>
+/// Attribute used to make fields read-only in the Unity Inspector.
+/// </summary>
 public class ReadOnlyAttribute : PropertyAttribute
 {
     // This attribute is just a marker, it doesn't need any additional implementation.
 }
 
+#endregion
+
 #if UNITY_EDITOR
-// Defines a PropertyDrawer that controls how the ReadOnlyAttribute will be rendered in the Inspector.
+
+#region === ReadOnlyDrawer ===
+
+/// <summary>
+/// Custom PropertyDrawer that renders fields marked with <see cref="ReadOnlyAttribute"/>
+/// as read-only in the Inspector.
+/// </summary>
 [CustomPropertyDrawer(typeof(ReadOnlyAttribute))]
 public class ReadOnlyDrawer : PropertyDrawer
 {
-    // Override the OnGUI method to control field rendering with the ReadOnlyAttribute.
+    /// <summary>
+    /// Draws the property in the Inspector as read-only.
+    /// </summary>
+    /// <param name="position">The rect for the property field.</param>
+    /// <param name="property">The property being drawn.</param>
+    /// <param name="label">The GUI label of the property.</param>
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
         GUI.enabled = false; // Disables editing of the field, making it read-only.
@@ -38,4 +55,6 @@ public class ReadOnlyDrawer : PropertyDrawer
         GUI.enabled = true; // Restores the GUI state to allow future normal interactions.
     }
 }
+#endregion
+
 #endif

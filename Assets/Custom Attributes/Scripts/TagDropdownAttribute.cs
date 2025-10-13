@@ -17,15 +17,40 @@ using System.Collections.Generic;
 using UnityEditor;
 #endif
 
+#region === Attribute Definition ===
+
+/// <summary>
+/// Attribute used to display a dropdown menu of Unity tags for string fields
+/// in the Inspector.
+/// </summary>
 public class TagDropdownAttribute : PropertyAttribute
 {
     // This attribute is just a marker, it does not need any additional implementation.
 }
 
+#endregion
+
 #if UNITY_EDITOR
+
+#region === TagDropdownDrawer ===
+
+/// <summary>
+/// Custom PropertyDrawer that displays a dropdown for string fields marked with
+/// <see cref="TagDropdownAttribute"/>. It handles missing tags and dynamically
+/// adjusts the field height in the Inspector.
+/// </summary>
 [CustomPropertyDrawer(typeof(TagDropdownAttribute))]
 public class TagDropdownDrawer : PropertyDrawer
 {
+    #region === OnGUI ===
+
+    /// <summary>
+    /// Draws the property field as a dropdown menu of Unity tags.
+    /// Displays a warning if the current string value does not match any tag.
+    /// </summary>
+    /// <param name="position">The rect for the property field.</param>
+    /// <param name="property">The serialized property being drawn.</param>
+    /// <param name="label">The GUI label of the property.</param>
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
         // Make sure the property is of type string.
@@ -49,6 +74,9 @@ public class TagDropdownDrawer : PropertyDrawer
         int currentIndex = tagList.IndexOf(currentString);
         if (currentIndex == -1) currentIndex = 0; //If the current value is not in the list, select "Missing Tag".
 
+        // Label with tooltip above the popup.
+        EditorGUI.LabelField(position, new GUIContent("", label.tooltip));
+
         // Display the dropdown in the Inspector.
         int newIndex = EditorGUI.Popup(position, label.text, currentIndex, tagList.ToArray());
 
@@ -64,7 +92,17 @@ public class TagDropdownDrawer : PropertyDrawer
         }
     }
 
-    // Specifies the additional height required to display the warning.
+    #endregion
+
+    #region === GetPropertyHeight ===
+
+    /// <summary>
+    /// Returns the height of the property field in the Inspector.
+    /// Adds extra height for warnings if the tag is missing.
+    /// </summary>
+    /// <param name="property">The property being drawn.</param>
+    /// <param name="label">The GUI label of the property.</param>
+    /// <returns>Height of the property field.</returns>
     public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
     {
         // If the string value does not match any tag, add space for the warning.
@@ -76,5 +114,10 @@ public class TagDropdownDrawer : PropertyDrawer
 
         return EditorGUIUtility.singleLineHeight;
     }
+
+    #endregion
 }
+
+#endregion
+
 #endif

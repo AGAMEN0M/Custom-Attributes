@@ -19,18 +19,39 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-// Attribute to mark fields that should be highlighted if their reference is null.
+#region === Attribute Definition ===
+
+/// <summary>
+/// Attribute used to mark fields that should be highlighted in the Inspector
+/// if their reference is null.
+/// </summary>
 public class HighlightEmptyReferenceAttribute : PropertyAttribute
 {
     // This attribute is just a marker, it does not need additional implementation.
 }
 
+#endregion
+
 #if UNITY_EDITOR
-// Custom property drawer for the HighlightEmptyReferenceAttribute.
+
+#region === HighlightEmptyReferenceDrawer ===
+
+/// <summary>
+/// Custom PropertyDrawer that visually highlights object reference fields
+/// marked with <see cref="HighlightEmptyReferenceAttribute"/> if they are null.
+/// Displays a red background and an error message in the Inspector.
+/// </summary>
 [CustomPropertyDrawer(typeof(HighlightEmptyReferenceAttribute))]
 public class HighlightEmptyReferenceDrawer : PropertyDrawer
 {
-    // Draws the property in the Inspector.
+    #region === OnGUI ===
+
+    /// <summary>
+    /// Draws the property in the Inspector, highlighting it if the reference is null.
+    /// </summary>
+    /// <param name="position">The rect for the property field.</param>
+    /// <param name="property">The property being drawn.</param>
+    /// <param name="label">The GUI label of the property.</param>
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
         Color previousColor = GUI.backgroundColor; // Save the previous background color.
@@ -72,12 +93,26 @@ public class HighlightEmptyReferenceDrawer : PropertyDrawer
         }
     }
 
-    // Returns the height of the property in the Inspector.
+    #endregion
+
+    #region === GetPropertyHeight ===
+
+    /// <summary>
+    /// Returns the height of the property in the Inspector.
+    /// Adds extra height if the property is empty to accommodate the help box.
+    /// </summary>
+    /// <param name="property">The property being drawn.</param>
+    /// <param name="label">The GUI label of the property.</param>
+    /// <returns>Height of the property field.</returns>
     public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
     {
         // If the property is empty, return height to accommodate the help box.
         bool isEmpty = property.propertyType == SerializedPropertyType.ObjectReference && property.objectReferenceValue == null;
         return isEmpty ? EditorGUIUtility.singleLineHeight * 3 + 4 : EditorGUIUtility.singleLineHeight;
     }
+    #endregion
 }
+
+#endregion
+
 #endif
