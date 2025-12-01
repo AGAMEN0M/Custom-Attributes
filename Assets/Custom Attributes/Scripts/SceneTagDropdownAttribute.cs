@@ -53,56 +53,85 @@ public class SceneTagDropdownDrawer : PropertyDrawer
     /// <summary>
     /// Draws the property field as a dropdown menu of scenes.
     /// Displays warnings or errors if the scene is missing or disabled.
+    /// Also supports multi-object editing by showing '-' if values differ.
     /// </summary>
     /// <param name="position">The rect for the property field.</param>
     /// <param name="property">The serialized property being drawn.</param>
     /// <param name="label">The GUI label of the property.</param>
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
-        // Make sure the property is of type string.
+        // Ensure the property is a string field.
         if (property.propertyType != SerializedPropertyType.String)
         {
             EditorGUI.LabelField(position, label.text, "Use [SceneTagDropdown] with strings.");
             return;
         }
 
-        // Get the scene list from "Scenes In Build".
+        // Begin property for prefab overrides and multi-object support.
+        EditorGUI.BeginProperty(position, label, property);
+
+        // Get the scenes from Build Settings.
         var allScenes = EditorBuildSettings.scenes.Select(scene => Path.GetFileNameWithoutExtension(scene.path)).ToArray();
         var enabledScenes = allScenes.Where(scene => EditorBuildSettings.scenes.First(s => Path.GetFileNameWithoutExtension(s.path) == scene).enabled).ToArray();
 
-        // Add a "Missing Scene" option to the dropdown if needed.
+        // Check for multiple different values (multi-object selection).
+        bool hasMultipleDifferentValues = property.hasMultipleDifferentValues;
+
+        // Current string value (shared or first selection).
         string currentString = property.stringValue;
+
+        // Handle the "Missing Scene" logic from original version.
         string currentText = string.IsNullOrEmpty(currentString) ? "Missing Scene" : $"Missing Scene ({currentString})";
         string missingScene = Array.Exists(allScenes, scene => scene == currentString) ? $"{currentString} [Disabled]" : currentText;
         string missingText = Array.Exists(enabledScenes, scene => scene == currentString) ? "" : missingScene;
         List<string> sceneList = new() { missingText };
         sceneList.AddRange(enabledScenes);
 
-        // Find the index of the current property value in the scene list.
+        // Determine the current index in the list.
         int currentIndex = sceneList.IndexOf(currentString);
-        if (currentIndex == -1) currentIndex = 0; // If the current value is not in the list, select "Missing Scene".
+        if (currentIndex == -1) currentIndex = 0;
 
-        // Label with tooltip above the popup.
+        // Tooltip label remains, but we don't need to show it explicitly.
         EditorGUI.LabelField(position, new GUIContent("", label.tooltip));
 
-        // Display the dropdown in the Inspector.
-        int newIndex = EditorGUI.Popup(position, label.text, currentIndex, sceneList.ToArray());
+        // Activate the mixed value visual state if multiple selections differ.
+        EditorGUI.showMixedValue = hasMultipleDifferentValues;
 
-        // If the selected option is not "Missing Scene", update the string with the new selection.
-        if (newIndex != 0) property.stringValue = sceneList[newIndex];
+        // Convert the list into GUIContent[] for the popup.
+        var options = sceneList.Select(s => new GUIContent(s)).ToArray();
 
-        // Checks if the scene is in EditorBuildSettings but disabled.
-        if (newIndex == 0 && !string.IsNullOrEmpty(currentString) && allScenes.Contains(currentString))
+        // Draw the dropdown popup.
+        int newIndex = EditorGUI.Popup(position, label, currentIndex, options);
+
+        // Reset the mixed value visual.
+        EditorGUI.showMixedValue = false;
+
+        // If the user selects a valid entry and it's different from the current.
+        if (newIndex != 0 && (!hasMultipleDifferentValues || newIndex != currentIndex)) property.stringValue = sceneList[newIndex];
+
+        // Show warnings/errors only when values are consistent.
+        if (!hasMultipleDifferentValues)
         {
-            Rect helpBoxRect = new(position.x, position.y + EditorGUIUtility.singleLineHeight + 2, position.width, EditorGUIUtility.singleLineHeight * 2);
-            EditorGUI.HelpBox(helpBoxRect, "The scene is in the build but is disabled.", MessageType.Warning);
+            // Scene existence and enable status checks.
+            bool existsInBuild = allScenes.Contains(currentString);
+            bool isEnabled = existsInBuild && EditorBuildSettings.scenes.First(s => Path.GetFileNameWithoutExtension(s.path) == currentString).enabled;
+
+            if (newIndex == 0 && !string.IsNullOrEmpty(currentString) && existsInBuild)
+            {
+                // Scene exists but is disabled.
+                Rect helpBoxRect = new(position.x, position.y + EditorGUIUtility.singleLineHeight + 2, position.width, EditorGUIUtility.singleLineHeight * 2);
+                EditorGUI.HelpBox(helpBoxRect, "The scene is in the build but is disabled.", MessageType.Warning);
+            }
+            else if (newIndex == 0)
+            {
+                // Scene name not found at all.
+                Rect helpBoxRect = new(position.x, position.y + EditorGUIUtility.singleLineHeight + 2, position.width, EditorGUIUtility.singleLineHeight * 2);
+                EditorGUI.HelpBox(helpBoxRect, "String value does not match any scenario!", MessageType.Error);
+            }
         }
-        else if (newIndex == 0)
-        {
-            // Defines the rectangle for the HelpBox below the dropdown field and adjusts its height.
-            Rect helpBoxRect = new(position.x, position.y + EditorGUIUtility.singleLineHeight + 2, position.width, EditorGUIUtility.singleLineHeight * 2);
-            EditorGUI.HelpBox(helpBoxRect, "String value does not match any scenario!", MessageType.Error);
-        }
+
+        // End property for proper prefab override handling.
+        EditorGUI.EndProperty();
     }
 
     #endregion

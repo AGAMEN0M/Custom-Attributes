@@ -163,6 +163,26 @@ MonoBehaviour:
   conditionalHide4: Test Attributes
   hide3: 0
   hide4: 1
+  position1: {x: 1, y: 1, z: 1}
+  position2: {x: -1, y: -1, z: -1}
+  rotation: {x: 0, y: 0, z: 0, w: 1}
+  gizmoTransform:
+  - positionTest: {x: 0, y: -1, z: 0}
+    rotationTest: {x: 0, y: 0, z: 0, w: 1}
+  cubeOffset1: {x: 0, y: 0, z: 0}
+  cubeSize1: {x: 1, y: 1, z: 1}
+  cubeOffset2: {x: 0, y: 1, z: 0}
+  cubeSize2: {x: 1, y: 1, z: 1}
+  gizmoCube:
+  - cubeOffset: {x: 0, y: -1, z: 0}
+    cubeSize: {x: 1, y: 1, z: 1}
+  sphereOffset1: {x: 0, y: -1, z: 0}
+  radius1: 1
+  sphereOffset2: {x: 0, y: 1, z: 0}
+  radius2: 1
+  gizmoSphere:
+  - sphereOffset: {x: 0, y: 0, z: 0}
+    radius: 1
 --- !u!4 &768447954
 Transform:
   m_ObjectHideFlags: 0

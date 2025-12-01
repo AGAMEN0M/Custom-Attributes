@@ -1,4 +1,4 @@
-/*
+﻿/*
  * ---------------------------------------------------------------------------
  * Description: Defines a custom attribute and property drawer to display a 
  *              dropdown menu for Unity tags in the Inspector.
@@ -11,6 +11,8 @@
 */
 
 using UnityEngine;
+using System.Linq;
+using System;
 
 #if UNITY_EDITOR
 using System.Collections.Generic;
@@ -47,49 +49,67 @@ public class TagDropdownDrawer : PropertyDrawer
     /// <summary>
     /// Draws the property field as a dropdown menu of Unity tags.
     /// Displays a warning if the current string value does not match any tag.
+    /// Fully supports multi-object editing.
     /// </summary>
     /// <param name="position">The rect for the property field.</param>
     /// <param name="property">The serialized property being drawn.</param>
     /// <param name="label">The GUI label of the property.</param>
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
-        // Make sure the property is of type string.
+        // Ensure the property is a string field.
         if (property.propertyType != SerializedPropertyType.String)
         {
             EditorGUI.LabelField(position, label.text, "Use [TagDropdown] with strings.");
             return;
         }
 
-        // Get the list of Unity tags.
-        string[] tags = UnityEditorInternal.InternalEditorUtility.tags;
+        // Begin property for prefab overrides and multi-object support.
+        EditorGUI.BeginProperty(position, label, property);
 
-        // Add a "Tag Missing" option to the dropdown if needed.
+        // Available Unity tags.
+        var tags = UnityEditorInternal.InternalEditorUtility.tags;
+
+        bool hasMultipleDifferentValues = property.hasMultipleDifferentValues;
         string currentString = property.stringValue;
+
+        // Build "Tag Missing" similar to Scene version.
         string currentText = string.IsNullOrEmpty(currentString) ? "Tag Missing" : $"Tag Missing ({currentString})";
-        string missingTagText = System.Array.Exists(tags, tag => tag == currentString) ? "" : currentText;
+        string missingTagText = Array.Exists(tags, t => t == currentString) ? "" : currentText;
+
         List<string> tagList = new() { missingTagText };
         tagList.AddRange(tags);
 
-        // Find the index of the current property value in the list of tags.
+        // Determine current index.
         int currentIndex = tagList.IndexOf(currentString);
-        if (currentIndex == -1) currentIndex = 0; //If the current value is not in the list, select "Missing Tag".
+        if (currentIndex == -1) currentIndex = 0;
 
-        // Label with tooltip above the popup.
+        // Tooltip only.
         EditorGUI.LabelField(position, new GUIContent("", label.tooltip));
 
-        // Display the dropdown in the Inspector.
-        int newIndex = EditorGUI.Popup(position, label.text, currentIndex, tagList.ToArray());
+        // Mixed value visual state.
+        EditorGUI.showMixedValue = hasMultipleDifferentValues;
 
-        //If the selected option is not "Tag Missing", update the string with the new selection.
-        if (newIndex != 0) property.stringValue = tagList[newIndex];
+        // Convert to GUIContent.
+        var options = tagList.Select(t => new GUIContent(t)).ToArray();
 
-        // Show a warning if "Tag Missing" is selected.
-        if (newIndex == 0)
+        // Draw dropdown.
+        int newIndex = EditorGUI.Popup(position, label, currentIndex, options);
+
+        // Reset mixed value display.
+        EditorGUI.showMixedValue = false;
+
+        // If valid and changed → update.
+        if (newIndex != 0 && (!hasMultipleDifferentValues || newIndex != currentIndex)) property.stringValue = tagList[newIndex];
+
+        // Show warning only if the result is "Tag Missing".
+        if (newIndex == 0 && !hasMultipleDifferentValues)
         {
-            // Define the rectangle for the HelpBox below the dropdown field and adjust its height.
             Rect helpBoxRect = new(position.x, position.y + EditorGUIUtility.singleLineHeight + 2, position.width, EditorGUIUtility.singleLineHeight * 2);
             EditorGUI.HelpBox(helpBoxRect, "String value does not match any tag!", MessageType.Warning);
         }
+
+        // End property.
+        EditorGUI.EndProperty();
     }
 
     #endregion
@@ -106,8 +126,8 @@ public class TagDropdownDrawer : PropertyDrawer
     public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
     {
         // If the string value does not match any tag, add space for the warning.
-        string[] tags = UnityEditorInternal.InternalEditorUtility.tags;
-        if (tags != null && !System.Array.Exists(tags, tag => tag == property.stringValue))
+        var tags = UnityEditorInternal.InternalEditorUtility.tags;
+        if (tags != null && !Array.Exists(tags, tag => tag == property.stringValue))
         {
             return EditorGUIUtility.singleLineHeight * 3; // Adds extra height.
         }

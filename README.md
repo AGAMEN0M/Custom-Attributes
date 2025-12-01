@@ -3,9 +3,9 @@ Custom Attributes for Unity with it you can customize your Inspector.
 
 # Download
 
-[Custom Attributes - Package v0.0.3](https://drive.google.com/file/d/1NkZ8ZfxD536vJnbhoLTIzXIny_Oj6Y4y/view?usp=drive_link)
+[Custom Attributes - Package v0.0.4](https://drive.google.com/file/d/1Z4Xe2GjjnFpQQsdXKz4crS6TTOYozd34/view?usp=drive_link)
  / 
-[Documentation](https://drive.google.com/file/d/1f6t6ejL-XkmLU_vmcyyjcItJhyBvll9N/view?usp=drive_link)
+[Documentation](https://drive.google.com/file/d/1-jbcWP2oFwGaxFjKdyMcywoLPM8UGk4i/view?usp=drive_link)
 
 # Description
 
@@ -20,4 +20,4 @@ If you have suggestions for improvements and bug fixes, please share them with m
 # Old Versions
 [Old Versions - Package](https://drive.google.com/drive/folders/11oOED_mjsBatoCkEb2e89NtRYpUq3ABZ)
 
-Current version in Git v0.3
+Current version in Git v0.4
