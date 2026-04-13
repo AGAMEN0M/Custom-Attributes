@@ -1,23 +1,90 @@
-# Custom Attributes
-Custom Attributes for Unity with it you can customize your Inspector.
+# 🎯 Custom Attributes for Unity
 
-# Download
+A collection of **custom attributes and editor tools** for Unity that enhances the Inspector and Scene workflow.
 
-[Custom Attributes - Package v0.0.4](https://drive.google.com/file/d/1Z4Xe2GjjnFpQQsdXKz4crS6TTOYozd34/view?usp=drive_link)
+With this package, you can make your Inspector more powerful, intuitive, and developer-friendly — similar to built-in Unity attributes, but extended.
+
+---
+
+# ✨ Features
+
+* 🧩 Custom Inspector Attributes
+* 🎮 Scene View Gizmo Editing (Cube, Sphere, Transform)
+* 🏷️ Tag Dropdown Selection
+* 🎬 Scene Dropdown (Build Settings)
+* 👁️ Conditional Field Visibility
+* 🔒 Read-Only Fields
+* ⚠️ Missing Reference Highlight
+* 🔘 Inspector Buttons (call methods directly)
+
+---
+
+# 📦 Download
+
+[Custom Attributes - Package v0.0.5](https://drive.google.com/file/d/13rC0Oh7ZTPxSlVE4f2LuTwKPcASsqJ-U/view?usp=drive_link)
  / 
 [Documentation](https://drive.google.com/file/d/1-jbcWP2oFwGaxFjKdyMcywoLPM8UGk4i/view?usp=drive_link)
 
-# Description
+---
 
-Custom Attributes for Unity With it, you can customize your Inspector.
-Just like Unity Attributes, it adds features that make it easier to use.
-Like easier selection of Tag or Scene name, view properties, etc.
+# 📺 Tutorial
 
-You can find more information on how to use it on the YouTube Playlist: [Click Here.](https://www.youtube.com/playlist?list=PL5hnfx09yM4I_6OdJvShZ0rRtYF9jv6Cd)
+🎥 Video tutorials:
+[Click Here.](https://www.youtube.com/playlist?list=PL5hnfx09yM4I_6OdJvShZ0rRtYF9jv6Cd)
 
-If you have suggestions for improvements and bug fixes, please share them with me so we can improve this package as much as possible.
+---
 
-# Old Versions
+# 🚀 Usage Examples
+
+### Button Attribute
+
+```csharp
+[Button(nameof(MyMethod))]
+private void MyMethod()
+{
+    Debug.Log("Button clicked.");
+}
+```
+
+### Conditional Hide
+
+```csharp
+[ConditionalHide("isEnabled")]
+public string hiddenField;
+
+public bool isEnabled;
+```
+
+### Tag Dropdown
+
+```csharp
+[TagDropdown]
+public string tagName;
+```
+
+### Scene Dropdown
+
+```csharp
+[SceneTagDropdown]
+public string sceneName;
+```
+
+---
+
+# 🔄 Version
+
+**Current version:** `v0.0.5`
+
+---
+
+# 📁 Old Versions
+
 [Old Versions - Package](https://drive.google.com/drive/folders/11oOED_mjsBatoCkEb2e89NtRYpUq3ABZ)
 
-Current version in Git v0.4
+---
+
+# 🤝 Contributing
+
+Suggestions, improvements, and bug reports are very welcome!
+
+Feel free to open an issue or contribute to help improve this package.
