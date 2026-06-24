@@ -73,3 +73,4 @@ crashlytics-build.properties
 
 # Ignore folders
 /Assets/Editor
+/Packages/com.unity.asset-store-tools
