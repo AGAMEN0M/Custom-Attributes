@@ -21,9 +21,11 @@ With this package, you can make your Inspector more powerful, intuitive, and dev
 
 # 📦 Download
 
-[Custom Attributes - Package v0.0.5](https://drive.google.com/file/d/13rC0Oh7ZTPxSlVE4f2LuTwKPcASsqJ-U/view?usp=drive_link)
+[Unity Asset Store]()
+
+[Custom Attributes - Package v0.0.5](https://github.com/AGAMEN0M/Custom-Attributes/releases/download/v0.0.5/Custom.Attributes.-.by.Lucas_AGAMENOM.unitypackage)
  / 
-[Documentation](https://drive.google.com/file/d/1-jbcWP2oFwGaxFjKdyMcywoLPM8UGk4i/view?usp=drive_link)
+[Documentation](https://github.com/user-attachments/files/30382193/Custom.Attributes.Documentation.pdf)
 
 ---
 
@@ -79,7 +81,7 @@ public string sceneName;
 
 # 📁 Old Versions
 
-[Old Versions - Package](https://drive.google.com/drive/folders/11oOED_mjsBatoCkEb2e89NtRYpUq3ABZ)
+[Old Versions - Package](https://github.com/AGAMEN0M/Custom-Attributes/releases)
 
 ---
 
