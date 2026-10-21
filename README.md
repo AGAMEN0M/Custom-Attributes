@@ -26,9 +26,9 @@ With this package, you can make your Inspector more powerful, intuitive, and dev
 
 [Unity Asset Store]()
 
-[Custom Attributes - Package v0.0.6]()
+[Custom Attributes - Package v0.0.6](https://github.com/AGAMEN0M/Custom-Attributes/releases/download/v0.0.6/Custom.Attributes.-.by.Lucas_AGAMENOM.unitypackage)
  / 
-[Documentation]()
+[Documentation](https://github.com/user-attachments/files/33749882/Custom.Attributes.Documentation.pdf)
 
 ---
 
