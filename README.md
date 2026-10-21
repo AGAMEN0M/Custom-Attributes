@@ -9,13 +9,16 @@ With this package, you can make your Inspector more powerful, intuitive, and dev
 # ✨ Features
 
 * 🧩 Custom Inspector Attributes
-* 🎮 Scene View Gizmo Editing (Cube, Sphere, Transform)
-* 🏷️ Tag Dropdown Selection
-* 🎬 Scene Dropdown (Build Settings)
-* 👁️ Conditional Field Visibility
-* 🔒 Read-Only Fields
+* 🎮 Scene View Gizmo Editing (Transform, Cube, Sphere, Cone, Path)
+* 🏷️ Tag, Scene, Layer and Custom Dropdowns
+* 👁️ Conditional Fields (ShowIf, HideIf, EnableIf, DisableIf)
+* 🔒 Read-Only and Required Fields
 * ⚠️ Missing Reference Highlight
-* 🔘 Inspector Buttons (call methods directly)
+* 🔘 Inspector Buttons (parameters, coroutines, confirmation)
+* 📂 Foldout Groups and Inspector-only Values
+* 🔗 Automatic Component References
+* 📥 Drag and Drop Lists
+* 🎨 Decorators (Info Box, Title, Line, Label, Suffix)
 
 ---
 
@@ -23,9 +26,9 @@ With this package, you can make your Inspector more powerful, intuitive, and dev
 
 [Unity Asset Store]()
 
-[Custom Attributes - Package v0.0.5](https://github.com/AGAMEN0M/Custom-Attributes/releases/download/v0.0.5/Custom.Attributes.-.by.Lucas_AGAMENOM.unitypackage)
+[Custom Attributes - Package v0.0.6]()
  / 
-[Documentation](https://github.com/user-attachments/files/30382193/Custom.Attributes.Documentation.pdf)
+[Documentation]()
 
 ---
 
@@ -41,41 +44,61 @@ With this package, you can make your Inspector more powerful, intuitive, and dev
 ### Button Attribute
 
 ```csharp
-[Button(nameof(MyMethod))]
-private void MyMethod()
+[Button("Reset Health", Confirm = true)]
+private void ResetHealth()
 {
     Debug.Log("Button clicked.");
 }
 ```
 
-### Conditional Hide
+### Conditional Fields
 
 ```csharp
-[ConditionalHide("isEnabled")]
-public string hiddenField;
-
 public bool isEnabled;
+
+[ShowIf(nameof(isEnabled))]
+public string shownField;
+
+[HideIf(nameof(isEnabled))]
+public string hiddenField;
 ```
 
-### Tag Dropdown
+### Required and Read-Only
+
+```csharp
+[Required("A target is required.")]
+public Transform target;
+
+[ReadOnly(ReadOnlyMode.WhenPlaying)]
+public float currentSpeed;
+```
+
+### Dropdowns
 
 ```csharp
 [TagDropdown]
 public string tagName;
-```
 
-### Scene Dropdown
-
-```csharp
 [SceneTagDropdown]
 public string sceneName;
+
+[LayerDropdown]
+public int layerIndex;
+```
+
+### Gizmos
+
+```csharp
+[GizmoSphere(nameof(radius), AlwaysShow = true)]
+public Vector3 center;
+public float radius = 1f;
 ```
 
 ---
 
 # 🔄 Version
 
-**Current version:** `v0.0.5`
+**Current version:** `v0.0.6`
 
 ---
 
